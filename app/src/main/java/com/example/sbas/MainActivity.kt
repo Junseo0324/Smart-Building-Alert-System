@@ -1,16 +1,18 @@
 package com.example.sbas
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.sbas.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
         val binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
 
         var temp : Int = 0      //temp 값 : 0 -> 평소  1 -> 주의 경보 2 -> 위험 경보
         var backgroundState : Int = 0
@@ -35,6 +37,15 @@ class MainActivity : AppCompatActivity() {
             binding.alertText.setText(" 위험 ~~가 동작중입니다.")
             //binding.MainLinear.setBackgroundColor(Color.parseColor("#FFFFFFFF"))//흰색
         }
+
+        binding.fireText.setOnClickListener{
+            val intent = Intent(this,StateActivity::class.java)
+            Log.v("tag","눌림")
+            intent.putExtra("msg",0)
+            startActivity(intent)
+
+        }
+
 
 
 
