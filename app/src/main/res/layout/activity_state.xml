@@ -45,7 +45,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="#FFEB3B"
                 android:text="센서"
                 android:textAlignment="center"
                 android:textSize="30sp" />

@@ -13,10 +13,9 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         var temp : Int = 0      //temp 값 : 0 -> 평소  1 -> 주의 경보 2 -> 위험 경보
         var backgroundState : Int = 0
-        // backgorundState 값 //
+        // backgroundState 값 //
         // W : 기본
         // Y : 주의
         // R : 화재
@@ -40,10 +39,24 @@ class MainActivity : AppCompatActivity() {
 
         binding.fireText.setOnClickListener{
             val intent = Intent(this,StateActivity::class.java)
-            Log.v("tag","눌림")
             intent.putExtra("msg",0)
+            Log.v("msg","0")
             startActivity(intent)
 
+        }
+
+        binding.gasText.setOnClickListener {
+            val intent = Intent(this,StateActivity::class.java)
+            intent.putExtra("msg",1)
+            Log.v("msg","1")
+            startActivity(intent)
+        }
+
+        binding.eqText.setOnClickListener{
+            val intent = Intent(this,StateActivity::class.java)
+            intent.putExtra("msg",2)
+            Log.v("msg","2")
+            startActivity(intent)
         }
 
 
