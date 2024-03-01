@@ -8,7 +8,7 @@
     tools:context=".logActivity">
 
     <TextView
-        android:id="@+id/stateTitle2"
+        android:id="@+id/logTitle"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:gravity="center"

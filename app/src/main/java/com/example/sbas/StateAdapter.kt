@@ -1,16 +1,15 @@
 package com.example.sbas
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.sbas.databinding.StateItemBinding
 
 class StateAdapter(val itemList: ArrayList<FireItem>):
 RecyclerView.Adapter<StateAdapter.StateViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StateAdapter.StateViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.state_item, parent, false)
-        return StateViewHolder(view)
+        val binding = StateItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        return StateViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: StateAdapter.StateViewHolder, position: Int) {
@@ -20,14 +19,28 @@ RecyclerView.Adapter<StateAdapter.StateViewHolder>(){
     }
 
     override fun getItemCount(): Int {
-        return itemList.count()
+        return itemList.size
     }
 
-    inner class StateViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        val tv_sensor = itemView.findViewById<TextView>(R.id.tv_sensor)
-        val tv_state = itemView.findViewById<TextView>(R.id.tv_state)
-        val tv_time = itemView.findViewById<TextView>(R.id.tv_time)
+    inner class StateViewHolder(val binding: StateItemBinding) : RecyclerView.ViewHolder(binding.root){
+        val tv_sensor = binding.tvSensor
+        val tv_state = binding.tvState
+        val tv_time = binding.tvTime
+
+
+        init {
+            itemView.setOnClickListener {
+                itemClickListener?.onItemClick(adapterPosition)
+            }
+        }
     }
+
+    interface OnItemClickListener {
+        fun onItemClick(position: Int) {
+        }
+    }
+
+    var itemClickListener: OnItemClickListener? = null
 
 
 }

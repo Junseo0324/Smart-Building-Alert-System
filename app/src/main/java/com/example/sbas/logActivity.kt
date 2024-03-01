@@ -2,14 +2,16 @@ package com.example.sbas
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.sbas.databinding.ActivityMainBinding
+import com.example.sbas.databinding.ActivityLogBinding
 
 class logActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_log)
+        val binding = ActivityLogBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.logTitle.text = intent.getStringExtra("data") +"센서로그"
 
-        val binding = ActivityMainBinding.inflate(layoutInflater)
+
 
 
     }

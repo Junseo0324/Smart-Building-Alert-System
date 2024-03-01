@@ -1,12 +1,15 @@
 package com.example.sbas
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sbas.databinding.ActivityStateBinding
 
 class StateActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        val intent = Intent(this,logActivity::class.java)
         super.onCreate(savedInstanceState)
 
         val binding = ActivityStateBinding.inflate(layoutInflater)
@@ -25,6 +28,17 @@ class StateActivity : AppCompatActivity() {
         binding.rv.adapter = stateAdapter
         binding.rv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
+        stateAdapter.itemClickListener = object : StateAdapter.OnItemClickListener{
+            override fun onItemClick(position: Int) {
+                val item:String = itemList[position].sensor
+                Log.v("이름",item)
+                intent.putExtra("data",item)
+                startActivity(intent)
+//                val item = itemList[position]
+//                Toast.makeText(applicationContext,"${item.sensor} 클릭함",Toast.LENGTH_SHORT).show()
+
+            }
+        }
 
 
 
