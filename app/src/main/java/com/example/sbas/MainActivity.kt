@@ -14,13 +14,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         var temp : Int = 0      //temp 값 : 0 -> 평소  1 -> 주의 경보 2 -> 위험 경보
-        var backgroundState : Int = 0
-        // backgroundState 값 //
-        // W : 기본
-        // Y : 주의
-        // R : 화재
-        // G : 지진
-        // B : 가스
+        var backgroundState : Int = 0  // backgroundState 값 W : 기본 Y : 주의 R : 화재 G : 지진 B : 가스
+
 
 
         //temp 값에 따라 달라지는 텍스트와 배경색
@@ -37,6 +32,9 @@ class MainActivity : AppCompatActivity() {
             //binding.MainLinear.setBackgroundColor(Color.parseColor("#FFFFFFFF"))//흰색
         }
 
+
+
+        //Intent//
         binding.fireText.setOnClickListener{
             val intent = Intent(this,StateActivity::class.java)
             intent.putExtra("msg",0)
