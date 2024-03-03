@@ -3,7 +3,7 @@ package com.example.sbas
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.sbas.databinding.ActivityMainBinding
 
@@ -33,28 +33,40 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+        binding.mainSc.setOnCheckedChangeListener { buttonView, isChecked ->
+            if(isChecked){
+                binding.fireToggle.isChecked = true
+                binding.gasToggle.isChecked = true
+                binding.eqToggle.isChecked = true
+            }else {
+                binding.fireToggle.isChecked = false
+                binding.gasToggle.isChecked = false
+                binding.eqToggle.isChecked = false
+            }
+        }
+
+        binding.fireToggle.setOnCheckedChangeListener { buttonView, isChecked ->
+            //fireToggle이 켜지면 어떤 행위를 할건지에 대한 리스너
+            if(isChecked){
+                Toast.makeText(applicationContext,"fireToggle on",Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(applicationContext,"fireToggle off",Toast.LENGTH_SHORT).show()
+            }
+        }
+
 
         //Intent//
         binding.fireText.setOnClickListener{
-            val intent = Intent(this,StateActivity::class.java)
-            intent.putExtra("msg",0)
-            Log.v("msg","0")
-            startActivity(intent)
-
+            val msg : String = binding.fireText.text.toString()
+            startState(msg)
         }
-
         binding.gasText.setOnClickListener {
-            val intent = Intent(this,StateActivity::class.java)
-            intent.putExtra("msg",1)
-            Log.v("msg","1")
-            startActivity(intent)
+            val msg : String = binding.gasText.text.toString()
+            startState(msg)
         }
-
         binding.eqText.setOnClickListener{
-            val intent = Intent(this,StateActivity::class.java)
-            intent.putExtra("msg",2)
-            Log.v("msg","2")
-            startActivity(intent)
+            val msg : String = binding.eqText.text.toString()
+            startState(msg)
         }
 
 
@@ -62,5 +74,11 @@ class MainActivity : AppCompatActivity() {
 
 
 
+    }
+
+    private fun startState(msg: String) {
+        val intent = Intent(this, StateActivity::class.java)
+        intent.putExtra("msg", msg)
+        startActivity(intent)
     }
 }

@@ -15,6 +15,8 @@ class StateActivity : AppCompatActivity() {
         val binding = ActivityStateBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.stateTitle.text = getIntent().getStringExtra("msg") + "의 현재 상태"
+
         val itemList = ArrayList<FireItem>()
 
         itemList.add(FireItem("불꽃탐지","0","14:30"))
@@ -26,7 +28,7 @@ class StateActivity : AppCompatActivity() {
         stateAdapter.notifyDataSetChanged()
 
         binding.rv.adapter = stateAdapter
-        binding.rv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        binding.rv.layoutManager = LinearLayoutManager(this)
 
         stateAdapter.itemClickListener = object : StateAdapter.OnItemClickListener{
             override fun onItemClick(position: Int) {
