@@ -17,18 +17,17 @@ class MainActivity : AppCompatActivity() {
         var backgroundState : Int = 0  // backgroundState 값 W : 기본 Y : 주의 R : 화재 G : 지진 B : 가스
 
 
-
         //temp 값에 따라 달라지는 텍스트와 배경색
         if(temp == 0){
-            binding.alertText.setText("감지된 위협이 없습니다.")
+            binding.alertText.text = "감지된 위협이 없습니다."
             binding.MainLinear.setBackgroundColor(Color.parseColor("#FFFFFFFF"))//White
         }else if(temp == 1){
-            binding.alertText.setText("주의 ~~를 확인하십시오.")
+            binding.alertText.text = "주의 ~~를 확인하십시오."
             binding.MainLinear.setBackgroundColor(Color.parseColor("#FFFFEB3B"))// Yellow
 
         }
         else {
-            binding.alertText.setText(" 위험 ~~가 동작중입니다.")
+            binding.alertText.text = " 위험 ~~가 동작중입니다."
             //binding.MainLinear.setBackgroundColor(Color.parseColor("#FFFFFFFF"))//흰색
         }
 
@@ -57,26 +56,19 @@ class MainActivity : AppCompatActivity() {
 
         //Intent//
         binding.fireText.setOnClickListener{
-            val msg : String = binding.fireText.text.toString()
-            startState(msg)
+            startState(binding.fireText.text)
         }
         binding.gasText.setOnClickListener {
-            val msg : String = binding.gasText.text.toString()
-            startState(msg)
+            startState(binding.gasText.text)
         }
         binding.eqText.setOnClickListener{
-            val msg : String = binding.eqText.text.toString()
-            startState(msg)
+            startState(binding.eqText.text)
         }
-
-
-
-
 
 
     }
 
-    private fun startState(msg: String) {
+    private fun startState(msg: CharSequence) {
         val intent = Intent(this, StateActivity::class.java)
         intent.putExtra("msg", msg)
         startActivity(intent)

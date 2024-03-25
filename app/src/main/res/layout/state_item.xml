@@ -8,21 +8,21 @@
     >
 
     <TextView
-        android:id="@+id/tv_sensor"
+        android:id="@+id/tv_data1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="불꽃탐지"
+        android:text="T"
         android:textSize="30sp" />
 
     <TextView
-        android:id="@+id/tv_state"
+        android:id="@+id/tv_data2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="상태값"
+        android:text="38'C"
         android:textSize="30sp" />
 
     <TextView
