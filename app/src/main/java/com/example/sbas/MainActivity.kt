@@ -3,9 +3,10 @@ package com.example.sbas
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import androidx.appcompat.app.AppCompatActivity
 import com.example.sbas.data.WarningModel
 import com.example.sbas.databinding.ActivityMainBinding
@@ -31,10 +32,12 @@ class MainActivity : AppCompatActivity() {
 
         retrieveAndSendFCMToken()
         onNewIntent(intent)
-        setupToggleListeners()
+        setupSwitchListeners()
         setupTextClickListeners()
 
     }
+
+    //warningID를 notification으로 부터 가져오기 위한 onNewIntent
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent) // 새로운 인텐트를 현재 인텐트로 설정
@@ -50,18 +53,19 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    // Switch(On/Off) 상태에 따라 받은 메시지를 어떻게 처리할지에 대한 메소드
     private fun handleWarningIdData(data: String) : String{
         val warningIdFromNotification = data.toInt()
         Log.d(TAG, warningIdFromNotification.toString())
-        val fireToggleOn = getToggleState(applicationContext, "fireToggle")
-        val gasToggleOn = getToggleState(applicationContext, "gasToggle")
-        val eqToggleOn = getToggleState(applicationContext, "eqToggle")
-        Log.d(TAG,"$fireToggleOn + $gasToggleOn + $eqToggleOn")
-        val warningId = if(!fireToggleOn && warningIdFromNotification == 1){
+        val fireScOn = getSwitchState(applicationContext, "fireSc")
+        val gasScOn = getSwitchState(applicationContext, "gasSc")
+        val eqScOn = getSwitchState(applicationContext, "eqSc")
+        Log.d(TAG,"$fireScOn + $gasScOn + $eqScOn")
+        val warningId = if(!fireScOn && warningIdFromNotification == 1){
             0
-        }else if(!gasToggleOn && warningIdFromNotification == 2){
+        }else if(!gasScOn && warningIdFromNotification == 2){
             0
-        }else if(!eqToggleOn && warningIdFromNotification == 3){
+        }else if(!eqScOn && warningIdFromNotification == 3){
             0
         }else{
             warningIdFromNotification
@@ -70,6 +74,7 @@ class MainActivity : AppCompatActivity() {
         return warningId.toString()
     }
 
+    // token 가져오기 및 서버로 토큰 보내기
     private fun retrieveAndSendFCMToken() {
         val isTokenSent = sharedPreferences.getBoolean("isTokenSent", false)
         if (!isTokenSent) {
@@ -85,50 +90,73 @@ class MainActivity : AppCompatActivity() {
             })
         }
     }
-    private fun setupToggleListeners() {
+
+    // 스위치 버튼 상태 변경 및 배경색 변경
+    private fun setupSwitchListeners() {
         binding.mainSc.setOnCheckedChangeListener { _, isChecked ->
-            binding.fireToggle.isChecked = isChecked
-            binding.gasToggle.isChecked = isChecked
-            binding.eqToggle.isChecked = isChecked
+            Log.d(TAG,"mainSwicth 변환 값 : $isChecked")
+            if(isChecked){
+                binding.fireSc.isChecked = true
+                binding.gasSc.isChecked = true
+                binding.eqSc.isChecked = true
+            }
+            else{
+                binding.fireSc.isChecked = false
+                binding.gasSc.isChecked = false
+                binding.eqSc.isChecked = false
+            }
+
         }
 
-        // 각 Toggle on/off 현황 SharedPreferences에 저장
-        binding.fireToggle.setOnCheckedChangeListener { _, isChecked ->
-            saveToggleState(applicationContext, "fireToggle", isChecked)
-            Log.d(TAG, sp.getBoolean("fireToggle",false).toString())
+        // 각 Sc on/off 현황 SharedPreferences에 저장
+        binding.fireSc.setOnCheckedChangeListener { _, isChecked ->
+            saveSwitchState(applicationContext, "fireSc", isChecked)
+            Log.d(TAG, sp.getBoolean("fireSc",false).toString())
             if(!isChecked){
                 updateBackgroundAndText("0")
             }
         }
 
-        binding.gasToggle.setOnCheckedChangeListener { _, isChecked ->
-            saveToggleState(applicationContext, "gasToggle", isChecked)
-            Log.d(TAG, sp.getBoolean("gasToggle",false).toString())
-            updateBackgroundAndText("0")
-
+        binding.gasSc.setOnCheckedChangeListener { _, isChecked ->
+            saveSwitchState(applicationContext, "gasSc", isChecked)
+            Log.d(TAG, sp.getBoolean("gasSc",false).toString())
+            if(!isChecked){
+                updateBackgroundAndText("0")
+            }
         }
 
-        binding.eqToggle.setOnCheckedChangeListener { _, isChecked ->
-            saveToggleState(applicationContext, "eqToggle", isChecked)
-            Log.d(TAG, sp.getBoolean("eqToggle",false).toString())
-            updateBackgroundAndText("0")
-
+        binding.eqSc.setOnCheckedChangeListener { _, isChecked ->
+            saveSwitchState(applicationContext, "eqSc", isChecked)
+            Log.d(TAG, sp.getBoolean("eqSc",false).toString())
+            if(!isChecked){
+                updateBackgroundAndText("0")
+            }
         }
     }
 
 
-    //StateAcitivity로 넘어가는 Intent 메소드
+    //센서 텍스트를 클릭 시 센서 로그를 볼 수 있도록 넘어가면서 텍스트에 존재하는 애니메이션 제거
     private fun setupTextClickListeners() {
         binding.fireText.setOnClickListener {
             startState(binding.fireText.text)
+            binding.fireText.clearAnimation()
+            updateBackgroundAndText("0")
+
         }
         binding.gasText.setOnClickListener {
             startState(binding.gasText.text)
+            binding.gasText.clearAnimation()
+            updateBackgroundAndText("0")
+
         }
         binding.eqText.setOnClickListener {
             startState(binding.eqText.text)
+            binding.eqText.clearAnimation()
+            updateBackgroundAndText("0")
         }
     }
+
+    //StateActivity로 넘어가는 메소드
     private fun startState(msg: CharSequence) {
         val intent = Intent(this, StateActivity::class.java)
         intent.putExtra("msg", msg)
@@ -154,46 +182,64 @@ class MainActivity : AppCompatActivity() {
         })
 
     }
-    //WarningId에 따른 배경색 & 텍스트 변경
+    //WarningId에 따른 배경색 & 텍스트 변경 -> 경고 메시지에 해당하는 값에 애니메이션 적용으로 변경 & 텍스트 변경은 유지.
     private fun updateBackgroundAndText(data: String) {
+        val anim = AlphaAnimation(0.0f,1.0f).apply {
+            duration = 100
+            startOffset = 20
+            repeatMode = Animation.REVERSE
+            repeatCount = Animation.INFINITE
+        }
         Log.d(TAG,"backgroundState $data")
         backgroundState = data.toInt()
         when (backgroundState) {
             0 -> {
                 binding.alertText.text = SAFE_MESSAGE
-                binding.MainLinear.setBackgroundColor(Color.parseColor("#FFFFFFFF")) // White
             }
             1 -> {
                 binding.alertText.text = "$DANGER 화재 경보기 $MESSAGE"
-                binding.MainLinear.setBackgroundColor(Color.parseColor("#FFFF0000")) // RED
+
+                binding.fireText.startAnimation(anim)
+                binding.gasText.clearAnimation()
+                binding.eqText.clearAnimation()
+
             }
             2 -> {
                 binding.alertText.text = "$DANGER 가스 누출 경보기 $MESSAGE"
-                binding.MainLinear.setBackgroundColor(Color.parseColor("#000000")) // Black
+
+                binding.fireText.clearAnimation()
+                binding.gasText.startAnimation(anim)
+                binding.eqText.clearAnimation()
             }
             3 -> {
                 binding.alertText.text = "$DANGER 지진 감지기 $MESSAGE"
-                binding.MainLinear.setBackgroundColor(Color.parseColor("#009900")) // Green
+
+                binding.fireText.clearAnimation()
+                binding.gasText.clearAnimation()
+                binding.eqText.startAnimation(anim)
+
             }
             else -> {
                 // 예외 상황 처리
                 binding.alertText.text = "알 수 없는 경고"
-                binding.MainLinear.setBackgroundColor(Color.parseColor("#FFA500")) // Orange
+
             }
         }
     }
 
-    fun saveToggleState(context: Context, toggleName: String, isOn: Boolean) {
+    //sharedPreferences에 Switch(On/Off)의 값을 저장
+    private fun saveSwitchState(context: Context, ScName: String, isOn: Boolean) {
         val editor = sp.edit()
-        editor.putBoolean(toggleName, isOn)
-        Log.d(TAG,"toggle -> $isOn")
+        editor.putBoolean(ScName, isOn)
+        Log.d(TAG,"$ScName Switch -> $isOn")
         editor.apply()
     }
 
-    fun getToggleState(context: Context, toggleName: String): Boolean {
+    // 저장된 Switch(On/Off) 값을 반환
+    private fun getSwitchState(context: Context, ScName: String): Boolean {
         val sharedPreferences = context.getSharedPreferences("AppSettings", Context.MODE_PRIVATE)
-        // 기본값으로 false를 반환합니다. 토글 버튼이 처음 사용될 때 OFF 상태라고 가정합니다.
-        return sharedPreferences.getBoolean(toggleName, true)
+        // 기본값으로 true를 반환하도록 설정. Switch(On/Off) 버튼이 처음 사용될 때 On 상태라고 가정합니다.
+        return sharedPreferences.getBoolean(ScName, true)
     }
 
 

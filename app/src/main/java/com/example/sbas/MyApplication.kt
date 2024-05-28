@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MyApplication : Application() {
     companion object {
-        private val BASE_URL = "myurl"
+        private val BASE_URL =""
 
 
         var networkService: FireNetworkService

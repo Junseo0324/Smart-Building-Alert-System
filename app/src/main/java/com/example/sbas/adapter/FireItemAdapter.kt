@@ -17,6 +17,8 @@ RecyclerView.Adapter<FireItemAdapter.FireItemViewHolder>(){
         holder.flameText.text = itemList[position].flame
         holder.temperatureText.text = itemList[position].temperature
         holder.timeText.text = itemList[position].sensorTime
+        holder.flameIdText.text = "불꽃 상태"
+        holder.temperIdText.text = "온도"
     }
 
     override fun getItemCount(): Int {
@@ -27,6 +29,8 @@ RecyclerView.Adapter<FireItemAdapter.FireItemViewHolder>(){
         val flameText = binding.tvData1
         val temperatureText = binding.tvData2
         val timeText = binding.tvTime
+        val flameIdText = binding.dataOneText //불꽃 상태
+        val temperIdText = binding.dataTwoText //온도
     }
 
 
