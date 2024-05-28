@@ -9,6 +9,7 @@ import com.example.sbas.databinding.QuakeItemBinding
 class QuakeItemAdapter(private val itemList: ArrayList<QuakeModel>) :
     RecyclerView.Adapter<QuakeItemAdapter.QuakeViewHolder>() {
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuakeViewHolder {
         val binding = QuakeItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return QuakeViewHolder(binding)

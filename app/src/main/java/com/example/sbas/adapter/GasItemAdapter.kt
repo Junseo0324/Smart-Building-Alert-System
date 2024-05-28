@@ -17,6 +17,8 @@ class GasItemAdapter(private val itemList: ArrayList<GasModel>):
         holder.dataOneText.text = itemList[position].flammable
         holder.dataTwoText.text = itemList[position].co
         holder.timeText.text = itemList[position].sensorTime
+        holder.flammableIdText.text = "가연성"
+        holder.coIdText.text = "일산화탄소"
     }
 
     override fun getItemCount(): Int {
@@ -27,6 +29,8 @@ class GasItemAdapter(private val itemList: ArrayList<GasModel>):
         val dataOneText = binding.tvData1
         val dataTwoText = binding.tvData2
         val timeText = binding.tvTime
+        val flammableIdText = binding.dataOneText
+        val coIdText = binding.dataTwoText
 
     }
 

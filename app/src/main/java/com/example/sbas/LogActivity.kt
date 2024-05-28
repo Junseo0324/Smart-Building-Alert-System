@@ -23,7 +23,6 @@ class LogActivity : AppCompatActivity() {
         setContentView(binding.root)
         var msg: String? = intent.getStringExtra("msg")
         binding.logTitle.text = "$msg 센서 로그"
-
         var fireItemList = ArrayList<FireModel>()
         var gasItemList = ArrayList<GasModel>()
         var quakeItemList = ArrayList<QuakeModel>()
@@ -32,76 +31,69 @@ class LogActivity : AppCompatActivity() {
         val gasCall: Call<ArrayList<GasModel>> = MyApplication.networkService.getGasData()
         val quakeCall: Call<ArrayList<QuakeModel>> = MyApplication.networkService.getQuakeData()
 
-        if(msg.equals("화재 경보기")){
-            binding.DataOneText.text = "불꽃"
-            binding.DataTwoText.text = "온도"
-            binding.DBTimeText.text = "시간"
-            binding.QuakeLinear.visibility = View.INVISIBLE
-            binding.logRvTwo.visibility = View.INVISIBLE
-            fireCall?.enqueue(object :Callback<ArrayList<FireModel>>{
-                override fun onResponse(call: Call<ArrayList<FireModel>>, response: Response<ArrayList<FireModel>>) {
-                    if(response.isSuccessful){
-                        fireItemList = response.body()!!
-                        val fireAdapter = FireItemAdapter(fireItemList)
-                        fireAdapter.notifyDataSetChanged()
+        when(msg){
+            "화재 경보기" -> {
+                binding.logRvTwo.visibility = View.INVISIBLE
+                fireCall?.enqueue(object :Callback<ArrayList<FireModel>>{
+                    override fun onResponse(call: Call<ArrayList<FireModel>>, response: Response<ArrayList<FireModel>>) {
+                        if(response.isSuccessful){
+                            fireItemList = response.body()!!
+                            val fireAdapter = FireItemAdapter(fireItemList)
+                            fireAdapter.notifyDataSetChanged()
 
-                        binding.logRv.adapter = fireAdapter
-                        binding.logRv.layoutManager = LinearLayoutManager(applicationContext)
+                            binding.logRv.adapter = fireAdapter
+                            binding.logRv.layoutManager = LinearLayoutManager(applicationContext)
 
+                        }
                     }
-                }
 
-                override fun onFailure(call: Call<ArrayList<FireModel>>, response: Throwable) {
-                    Log.d("통신","실패..")
-                }
-            })
-
-        }
-        else if(msg.equals("가스누출 경보기")){
-            binding.DataOneText.text = "CO"
-            binding.DataTwoText.text = "가연성"
-            binding.DBTimeText.text = "시간"
-            binding.QuakeLinear.visibility = View.INVISIBLE
-            binding.logRvTwo.visibility = View.INVISIBLE
-            gasCall?.enqueue(object : Callback<ArrayList<GasModel>>{
-                override fun onResponse(call: Call<ArrayList<GasModel>>, response: Response<ArrayList<GasModel>>) {
-                    if(response.isSuccessful){
-                        gasItemList = response.body()!!
-                        val gasAdapter = GasItemAdapter(gasItemList)
-                        gasAdapter.notifyDataSetChanged()
-
-                        binding.logRv.adapter = gasAdapter
-                        binding.logRv.layoutManager = LinearLayoutManager(applicationContext)
+                    override fun onFailure(call: Call<ArrayList<FireModel>>, response: Throwable) {
+                        Log.d("통신","실패..")
                     }
-                }
+                })
+            }
+            "가스누출 경보기"->{
+                binding.logRvTwo.visibility = View.INVISIBLE
+                gasCall?.enqueue(object : Callback<ArrayList<GasModel>>{
+                    override fun onResponse(call: Call<ArrayList<GasModel>>, response: Response<ArrayList<GasModel>>) {
+                        if(response.isSuccessful){
+                            gasItemList = response.body()!!
+                            val gasAdapter = GasItemAdapter(gasItemList)
+                            gasAdapter.notifyDataSetChanged()
 
-                override fun onFailure(call: Call<ArrayList<GasModel>>, response: Throwable) {
-                    Log.d("통신","실패..")
-                }
-            })
-        }
-        else {
-            binding.vibration.text = "지진 감지"
-            binding.timeText.text = "시간"
-            binding.linearLayout.visibility = View.GONE
-            binding.logRv.visibility = View.GONE
-            binding.QuakeLinear.visibility = View.VISIBLE
-            binding.logRvTwo.visibility = View.VISIBLE
-            quakeCall?.enqueue(object : Callback<ArrayList<QuakeModel>>{
-                override fun onResponse(call: Call<ArrayList<QuakeModel>>, response: Response<ArrayList<QuakeModel>>) {
-                    if(response.isSuccessful){
-                        quakeItemList = response.body()!!
-                        val quakeAdapter = QuakeItemAdapter(quakeItemList)
-                        quakeAdapter.notifyDataSetChanged()
-                        binding.logRvTwo.adapter = quakeAdapter
-                        binding.logRvTwo.layoutManager = LinearLayoutManager(applicationContext)
+                            binding.logRv.adapter = gasAdapter
+                            binding.logRv.layoutManager = LinearLayoutManager(applicationContext)
+                        }
                     }
-                }
 
-                override fun onFailure(call: Call<ArrayList<QuakeModel>>, response: Throwable) {
-                    Log.d("통신","실패..")
-                }
-            })
+                    override fun onFailure(call: Call<ArrayList<GasModel>>, response: Throwable) {
+                        Log.d("통신","실패..")
+                    }
+                })
+            }
+            "지진 감지기"->{
+                binding.logRv.visibility = View.GONE
+                binding.logRvTwo.visibility = View.VISIBLE
+                quakeCall?.enqueue(object : Callback<ArrayList<QuakeModel>>{
+                    override fun onResponse(call: Call<ArrayList<QuakeModel>>, response: Response<ArrayList<QuakeModel>>) {
+                        if(response.isSuccessful){
+                            quakeItemList = response.body()!!
+                            val quakeAdapter = QuakeItemAdapter(quakeItemList)
+                            quakeAdapter.notifyDataSetChanged()
+                            binding.logRvTwo.adapter = quakeAdapter
+                            binding.logRvTwo.layoutManager = LinearLayoutManager(applicationContext)
+                        }
+                    }
+
+                    override fun onFailure(call: Call<ArrayList<QuakeModel>>, response: Throwable) {
+                        Log.d("통신","실패..")
+                    }
+                })
+            }
+            else -> {
+                Log.d("LogActivityLogTest","Retrofit 통신 에러 ( 다른 값이 들어옴 : $msg )")
+            }
+
         }
 
     }

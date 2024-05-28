@@ -5,206 +5,184 @@
     android:id="@+id/MainLinear"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:backgroundTint="#FFFFFF"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/mainText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:text="Smart Building Alert System"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="25sp"
+        android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/mainText"
-            android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:text="위험 요소 감지 모니터링"
-            android:textAlignment="center"
-            android:textColor="#000000"
-            android:textSize="30sp"
-            android:textStyle="bold" />
-
-        <Switch
-            android:id="@+id/mainSc"
-            android:layout_width="wrap_content"
-            android:layout_height="49dp"
-            android:layout_weight="1"
-            android:checked="true"/>
-    </LinearLayout>
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent">
 
-        <TableLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="5dp"
-            android:layout_weight="1"
-            android:stretchColumns="*">
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            android:orientation="vertical">
 
-            <TableRow
+            <TextView
+                android:id="@+id/alertTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+
+                android:layout_marginEnd="20dp"
+                android:text="경고 메시지"
+                android:textColor="#000000"
+                android:textSize="24sp" />
+
+            <LinearLayout
+                android:id="@+id/alertLinear"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_margin="10dp"
+                android:background="@drawable/dash_line"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/alertText"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_margin="20dp"
+                    android:gravity="center"
+                    android:text="&quot;감지된 위협이 없습니다&quot;"
+                    android:textAlignment="center"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/mainSensorLinear"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/mainScText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:text="센서 전체 설정"
+                    android:textColor="#000000"
+                    android:textSize="30sp" />
+
+                <Switch
+                    android:id="@+id/mainSc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:track="@drawable/switch_track_selector"
+                    android:thumb="@drawable/switch_thumb"
+                    android:checked="true" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/fireLinear"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/round_edge"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/fireText"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_margin="10dp"
-                    android:background="@drawable/edge"
-                    android:gravity="center|center_vertical"
+                    android:layout_margin="20dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
                     android:text="화재 경보기"
-                    android:textAlignment="center"
                     android:textColor="#000000"
                     android:textSize="30sp" />
 
-            </TableRow>
+                <Switch
+                    android:id="@+id/fireSc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:track="@drawable/switch_track_selector"
+                    android:thumb="@drawable/switch_thumb"
+                    android:layout_margin="10dp"
+                    android:checked="true"/>
+            </LinearLayout>
 
-            <TableRow
+            <LinearLayout
+                android:id="@+id/gasLinear"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_height="100dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/round_edge"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/gasText"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_margin="10dp"
-                    android:background="@drawable/edge"
-                    android:gravity="center|center_vertical"
+                    android:layout_margin="20dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
                     android:text="가스누출 경보기"
-                    android:textAlignment="center"
                     android:textColor="#000000"
                     android:textSize="30sp" />
 
-            </TableRow>
+                <Switch
+                    android:id="@+id/gasSc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:track="@drawable/switch_track_selector"
+                    android:thumb="@drawable/switch_thumb"
+                    android:layout_margin="10dp"
+                    android:checked="true"/>
+            </LinearLayout>
 
-            <TableRow
+            <LinearLayout
+                android:id="@+id/quakeLinear"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_height="100dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/round_edge"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/eqText"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_margin="10dp"
-                    android:background="@drawable/edge"
-                    android:gravity="center|center_vertical"
+                    android:layout_margin="20dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
                     android:text="지진 감지기"
-                    android:textAlignment="center"
                     android:textColor="#000000"
                     android:textSize="30sp" />
 
-            </TableRow>
-        </TableLayout>
+                <Switch
+                    android:id="@+id/eqSc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:track="@drawable/switch_track_selector"
+                    android:thumb="@drawable/switch_thumb"
+                    android:layout_margin="10dp"
+                    android:checked="true"/>
+            </LinearLayout>
 
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="5dp"
-            android:layout_weight="2"
-            android:stretchColumns="*">
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-
-                android:layout_weight="1"
-                android:gravity="clip_vertical">
-
-                <ToggleButton
-                    android:id="@+id/fireToggle"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="25dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="25dp"
-                    android:background="@color/white"
-                    android:text="ToggleButton"
-                    android:textAlignment="center"
-                    android:textColor="#000000"
-                    android:textSize="30sp"
-                    android:checked="true"
-                    android:textOff="OFF"
-                    android:textOn="ON"
-
-                    />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
-
-                <ToggleButton
-                    android:id="@+id/gasToggle"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="25dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="25dp"
-                    android:background="@color/white"
-                    android:text="ToggleButton"
-                    android:textAlignment="center"
-                    android:textColor="#000000"
-                    android:textSize="30sp"
-                    android:checked="true"
-                    android:textOff="OFF"
-                    android:textOn="ON"/>
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
-
-                <ToggleButton
-                    android:id="@+id/eqToggle"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="25dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="25dp"
-                    android:background="@color/white"
-                    android:text="ToggleButton"
-                    android:textAlignment="center"
-                    android:textColor="#000000"
-                    android:textSize="30sp"
-                    android:checked="true"
-                    android:textOff="OFF"
-                    android:textOn="ON"/>
-            </TableRow>
-        </TableLayout>
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/alertTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="//Text"
-        android:textSize="24sp" />
-
-    <TextView
-        android:id="@+id/alertText"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/dash_line"
-        android:gravity="center"
-        android:text="&quot;감지된 위협이 없습니다&quot;"
-        android:textAlignment="center"
-        android:textSize="20sp" />
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
