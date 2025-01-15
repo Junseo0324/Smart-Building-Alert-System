@@ -1,5 +1,6 @@
 package com.example.sbas
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -22,7 +23,7 @@ class LogActivity : AppCompatActivity() {
         val binding = ActivityLogBinding.inflate(layoutInflater)
         setContentView(binding.root)
         var msg: String? = intent.getStringExtra("msg")
-        binding.logTitle.text = "$msg 센서 로그"
+        binding.logToolbar.title = "$msg 센서 로그"
         var fireItemList = ArrayList<FireModel>()
         var gasItemList = ArrayList<GasModel>()
         var quakeItemList = ArrayList<QuakeModel>()
@@ -32,7 +33,7 @@ class LogActivity : AppCompatActivity() {
         val quakeCall: Call<ArrayList<QuakeModel>> = MyApplication.networkService.getQuakeData()
 
         when(msg){
-            "화재 경보기" -> {
+            "화재 센서" -> {
                 binding.logRvTwo.visibility = View.INVISIBLE
                 fireCall?.enqueue(object :Callback<ArrayList<FireModel>>{
                     override fun onResponse(call: Call<ArrayList<FireModel>>, response: Response<ArrayList<FireModel>>) {
@@ -52,7 +53,7 @@ class LogActivity : AppCompatActivity() {
                     }
                 })
             }
-            "가스누출 경보기"->{
+            "가스 누출 센서"->{
                 binding.logRvTwo.visibility = View.INVISIBLE
                 gasCall?.enqueue(object : Callback<ArrayList<GasModel>>{
                     override fun onResponse(call: Call<ArrayList<GasModel>>, response: Response<ArrayList<GasModel>>) {
@@ -71,7 +72,7 @@ class LogActivity : AppCompatActivity() {
                     }
                 })
             }
-            "지진 감지기"->{
+            "지진 감지 센서"->{
                 binding.logRv.visibility = View.GONE
                 binding.logRvTwo.visibility = View.VISIBLE
                 quakeCall?.enqueue(object : Callback<ArrayList<QuakeModel>>{
@@ -91,7 +92,7 @@ class LogActivity : AppCompatActivity() {
                 })
             }
             else -> {
-                Log.d("LogActivityLogTest","Retrofit 통신 에러 ( 다른 값이 들어옴 : $msg )")
+                startActivity(Intent(this,MainActivity::class.java))
             }
 
         }

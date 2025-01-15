@@ -56,11 +56,9 @@ class MainActivity : AppCompatActivity() {
     // Switch(On/Off) 상태에 따라 받은 메시지를 어떻게 처리할지에 대한 메소드
     private fun handleWarningIdData(data: String) : String{
         val warningIdFromNotification = data.toInt()
-        Log.d(TAG, warningIdFromNotification.toString())
         val fireScOn = getSwitchState(applicationContext, "fireSc")
         val gasScOn = getSwitchState(applicationContext, "gasSc")
         val eqScOn = getSwitchState(applicationContext, "eqSc")
-        Log.d(TAG,"$fireScOn + $gasScOn + $eqScOn")
         val warningId = if(!fireScOn && warningIdFromNotification == 1){
             0
         }else if(!gasScOn && warningIdFromNotification == 2){
@@ -80,21 +78,38 @@ class MainActivity : AppCompatActivity() {
         if (!isTokenSent) {
             FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
                 if (!task.isSuccessful) {
-                    Log.d("token 실패", "실패.")
                     return@OnCompleteListener
                 }
 
                 val token: String = task.result
                 sendRegistrationToServer(token)
-                Log.d("Get Token", token)
             })
         }
     }
 
-    // 스위치 버튼 상태 변경 및 배경색 변경
+    //앱 처음 실행 시 FCM Token을 서버로 전송하는 메소드
+    private fun sendRegistrationToServer(token: String) {
+        val warningCall: Call<WarningModel> = MyApplication.networkService.sendToken(WarningModel(token))
+
+        warningCall?.enqueue(object : Callback<WarningModel> {
+            override fun onResponse(call: Call<WarningModel>, response: Response<WarningModel>) {
+                Log.d("Response 성공 :", response.body().toString())
+                with(sharedPreferences.edit()) {
+                    putBoolean("isTokenSent", true)
+                    apply()
+                }
+            }
+
+            override fun onFailure(call: Call<WarningModel>, t: Throwable) {
+                Log.d("Failure", "exception: $t")
+            }
+        })
+
+    }
+
+    // 스위치 버튼 상태 변경
     private fun setupSwitchListeners() {
         binding.mainSc.setOnCheckedChangeListener { _, isChecked ->
-            Log.d(TAG,"mainSwicth 변환 값 : $isChecked")
             if(isChecked){
                 binding.fireSc.isChecked = true
                 binding.gasSc.isChecked = true
@@ -135,7 +150,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    //센서 텍스트를 클릭 시 센서 로그를 볼 수 있도록 넘어가면서 텍스트에 존재하는 애니메이션 제거
+    //센서 텍스트를 클릭 시 센서 페이지로 이동 및 애니메이션 제거
     private fun setupTextClickListeners() {
         binding.fireText.setOnClickListener {
             startState(binding.fireText.text)
@@ -163,25 +178,7 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    //앱 처음 실행 시 FCM Token을 서버로 전송하는 메소드
-    private fun sendRegistrationToServer(token: String) {
-        val warningCall: Call<WarningModel> = MyApplication.networkService.sendToken(WarningModel(token))
 
-        warningCall?.enqueue(object : Callback<WarningModel> {
-            override fun onResponse(call: Call<WarningModel>, response: Response<WarningModel>) {
-                Log.d("Response 성공 :", response.body().toString())
-                with(sharedPreferences.edit()) {
-                    putBoolean("isTokenSent", true)
-                    apply()
-                }
-            }
-
-            override fun onFailure(call: Call<WarningModel>, t: Throwable) {
-                Log.d("Failure", "exception: $t")
-            }
-        })
-
-    }
     //WarningId에 따른 배경색 & 텍스트 변경 -> 경고 메시지에 해당하는 값에 애니메이션 적용으로 변경 & 텍스트 변경은 유지.
     private fun updateBackgroundAndText(data: String) {
         val anim = AlphaAnimation(0.0f,1.0f).apply {
@@ -194,10 +191,10 @@ class MainActivity : AppCompatActivity() {
         backgroundState = data.toInt()
         when (backgroundState) {
             0 -> {
-                binding.alertText.text = SAFE_MESSAGE
+                binding.alertText.text = "감지된 위협이 없습니다"
             }
             1 -> {
-                binding.alertText.text = "$DANGER 화재 경보기 $MESSAGE"
+                binding.alertText.text = "화재가 탐지되었습니다."
 
                 binding.fireText.startAnimation(anim)
                 binding.gasText.clearAnimation()
@@ -205,14 +202,14 @@ class MainActivity : AppCompatActivity() {
 
             }
             2 -> {
-                binding.alertText.text = "$DANGER 가스 누출 경보기 $MESSAGE"
+                binding.alertText.text = "가스 누출이 탐지되었습니다."
 
                 binding.fireText.clearAnimation()
                 binding.gasText.startAnimation(anim)
                 binding.eqText.clearAnimation()
             }
             3 -> {
-                binding.alertText.text = "$DANGER 지진 감지기 $MESSAGE"
+                binding.alertText.text = "지진이 탐지되었습니다."
 
                 binding.fireText.clearAnimation()
                 binding.gasText.clearAnimation()
@@ -228,25 +225,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     //sharedPreferences에 Switch(On/Off)의 값을 저장
-    private fun saveSwitchState(context: Context, ScName: String, isOn: Boolean) {
+    private fun saveSwitchState(context: Context, scName: String, isOn: Boolean) {
         val editor = sp.edit()
-        editor.putBoolean(ScName, isOn)
-        Log.d(TAG,"$ScName Switch -> $isOn")
+        editor.putBoolean(scName, isOn)
         editor.apply()
     }
 
     // 저장된 Switch(On/Off) 값을 반환
-    private fun getSwitchState(context: Context, ScName: String): Boolean {
+    private fun getSwitchState(context: Context, scName: String): Boolean {
         val sharedPreferences = context.getSharedPreferences("AppSettings", Context.MODE_PRIVATE)
-        // 기본값으로 true를 반환하도록 설정. Switch(On/Off) 버튼이 처음 사용될 때 On 상태라고 가정합니다.
-        return sharedPreferences.getBoolean(ScName, true)
+        return sharedPreferences.getBoolean(scName, true)
     }
 
 
     companion object {
-        const val SAFE_MESSAGE = "감지된 위협 없음"
-        const val DANGER = "경고"
-        const val MESSAGE = "가 실행중입니다."
         const val TAG = "MainActivityLogTest"
     }
 }

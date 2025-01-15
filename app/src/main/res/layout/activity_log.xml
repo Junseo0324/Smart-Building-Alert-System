@@ -4,22 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5FA"
+    android:background="#FFFFFF"
     android:orientation="vertical"
     tools:context=".LogActivity">
 
-    <TextView
-        android:id="@+id/logTitle"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/logToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:gravity="center"
-        android:text="센서로그"
-        android:textAlignment="center"
-        android:textColor="#000000"
-        android:textSize="30sp"
-        android:textStyle="bold" />
+        android:background="@color/white"
+        android:elevation="4dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        app:title="센서 로그"
+        app:titleTextColor="@android:color/black" />
 
 
     <androidx.recyclerview.widget.RecyclerView
