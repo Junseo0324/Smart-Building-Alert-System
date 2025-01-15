@@ -8,8 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MyApplication : Application() {
     companion object {
-        private val BASE_URL =""
-
+        private val BASE_URL ="http://localhost:8888"
 
         var networkService: FireNetworkService
         val gson = GsonBuilder().setLenient().create()
