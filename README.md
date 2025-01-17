@@ -19,6 +19,13 @@
 
 <br>
 
+## 기술 스택
+
+- **Android**: Kotlin, Firebase Cloud Messaging , View binding , SharedPreferences , Retrofit
+- **Backend**: Java, Spring boot, MySQL
+
+<br>
+
 
 ## 서비스 UI
 <img src = "images/appinfo-1.png" width ="30%" /> <img src = "images/appinfo-2.png" width= "30%"/>
