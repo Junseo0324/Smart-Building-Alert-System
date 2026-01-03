@@ -11,7 +11,7 @@
 | 이름   | 역할  | GitHub 프로필 |
 |------|------|----------------|
 | 허준서 | Android  | [Junseo0324](https://github.com/Junseo0324) |
-| 박명진 | Arduino  | - |
+| 박명진 | Arduino  | [Unsept](https://github.com/Unsept) |
 
 ---
 
